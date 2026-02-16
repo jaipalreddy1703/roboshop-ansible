@@ -53,7 +53,6 @@
       overwrite: true
     loop: "{{ ec2_output.results }}" #list
     when:
-    # and 
     - item.item == "frontend"
     - dothis == "create"
 
