@@ -1,0 +1,25 @@
+- name: mongodb configure
+  hosts: mongodb
+  become: yes
+  taks:
+  - name: copy mango repo
+    ansible.builtin.copy:
+      src: mango.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: install mangodb server
+    ansible.builtin.dnf:
+      name: mongodb-org
+      state: present
+
+  - name: replace content in conf to allow remote connections
+    ansible.builtin.replace:
+      path: /etc/mongod.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+
+  - name: start and enable mongodb
+    ansible.builtin.service:
+      name: mongod
+      state: started
+      enabled: yes
