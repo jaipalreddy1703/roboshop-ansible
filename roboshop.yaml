@@ -51,12 +51,13 @@
       ttl: 1
       value: "{{item.instances[0].public_ip_address}}"
       wait: true
-    loop: "{{ ec2_output.results }}"
+    loop: "{{ ec2_output.results }}" #list
     when:
     # and 
     - item.item == "frontend"
     - action == "create"
 
+  #DESTROY 
   - name: delete route 53 records
     amazon.aws.route53:
       state: absent
@@ -69,7 +70,8 @@
 
   - name: delete EC2 instances
     amazon.aws.ec2_instance:
-      name: "{{item}}-{{env}}"
       state: absent
+      name: "{{item}}-{{env}}"
+      wait: false
     loop: "{{instances}}"
     when: action=="destroy"
