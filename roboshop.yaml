@@ -5,7 +5,7 @@
     sg_id: "sg-005f466126c3865b6"
     ami_id: "ami-0220d79f3f480ecf5"
     domain_name: "vakiti.online"
-    action: "create"
+    dothis: create
     env: dev
     instances:
     - mongodb
@@ -23,12 +23,12 @@
         Name: "{{item}}-{{env}}"
     loop: "{{instances}}"
     register: ec2_output
-    when: action == "create"
+    when: dothis == "create"
 
   - name: print the output
     ansible.builtin.debug:
       msg: "{{ec2_output}}"
-    when: action == "create"
+    when: dothis == "create"
 
   - name: create ROUTE 53 records
     amazon.aws.route53:
@@ -40,7 +40,7 @@
       value: "{{item.instances[0].private_ip_address}}"
       wait: true
     loop: "{{ ec2_output.results }}"
-    when: action == "create"
+    when: dothis == "create"
 
   - name: create ROUTE 53 records
     amazon.aws.route53:
@@ -55,7 +55,7 @@
     when:
     # and 
     - item.item == "frontend"
-    - action == "create"
+    - dothis == "create"
 
   #DESTROY 
   - name: delete route 53 records
@@ -66,7 +66,7 @@
       type: A
       ttl: 1
     loop: "{{instances}}"
-    when: action == "destroy"
+    when: dothis == "destroy"
 
   - name: delete EC2 instances
     amazon.aws.ec2_instance:
@@ -74,4 +74,4 @@
       name: "{{item}}-{{env}}"
       wait: false
     loop: "{{instances}}"
-    when: action=="destroy"
+    when: dothis=="destroy"
