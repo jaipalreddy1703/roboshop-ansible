@@ -29,6 +29,6 @@
       dest: /tmp/catalogue.zip
 
   - name: unziping the application
-    ansible.builtin.unarcunarchive:
+    ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
