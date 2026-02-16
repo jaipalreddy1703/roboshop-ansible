@@ -2,12 +2,12 @@
   hosts: mongodb
   become: yes
   tasks:
-  - name: copy mango repo
+  - name: copy mongo repo
     ansible.builtin.copy:
-      src: mango.repo
+      src: mmongo.repo
       dest: /etc/yum.repos.d/mongo.repo
 
-  - name: install mangodb server
+  - name: install mongodb server
     ansible.builtin.dnf:
       name: mongodb-org
       state: present
