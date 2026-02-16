@@ -1,7 +1,7 @@
 - name: mongodb configure
   hosts: mongodb
   become: yes
-  taks:
+  tasks:
   - name: copy mango repo
     ansible.builtin.copy:
       src: mango.repo
