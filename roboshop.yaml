@@ -7,9 +7,6 @@
     domain_name: "vakiti.online"
     dothis: create
     env: dev
-    instances:
-    - mongodb
-    - catalogue
   tasks:
   - name: create EC2 instance
     amazon.aws.ec2_instance:
