@@ -38,7 +38,8 @@
       type: A
       ttl: 1
       value: "{{item.instances[0].private_ip_address}}"
-      wait: true
+      wait: false
+      overwrite: true
     loop: "{{ ec2_output.results }}"
     when: dothis == "create"
 
@@ -50,7 +51,8 @@
       type: A
       ttl: 1
       value: "{{item.instances[0].public_ip_address}}"
-      wait: true
+      wait: false
+      overwrite: true
     loop: "{{ ec2_output.results }}" #list
     when:
     # and 
@@ -62,11 +64,21 @@
     amazon.aws.route53:
       state: absent
       zone: "{{domain_name}}"
-      record: "{{item}}-{{env}}.{{domain_name}}"
+      record: "roboshop-{{env}}.{{domain_name}}" # roboshop-dev.vakiti.online
       type: A
       ttl: 1
     loop: "{{instances}}"
     when: dothis == "destroy"
+
+  - name: delete r53 records
+    amazon.aws.route53:
+      state: absent
+      zone: "{{ domain_name }}"
+      record: "{{ item }}-{{ env }}.{{ domain_name }}" # roboshop-dev.vakiti.online
+      type: A
+      ttl: 1
+    loop: "{{ instances }}"
+    when: action == "destroy"
 
   - name: delete EC2 instances
     amazon.aws.ec2_instance:
