@@ -7,7 +7,7 @@
     domain_name: "vakiti.online"
     action: "create"
     env: dev
-    instaces:
+    instances:
     - mongodb
     - catalogue
   tasks:
@@ -21,7 +21,7 @@
         Project: roboshop
         Component: "{{item}}"
         Name: "{{item}}-{{env}}"
-    loop: "{{instaces}}"
+    loop: "{{instances}}"
     register: ec2_output
     when: action == "create"
 
