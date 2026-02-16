@@ -57,7 +57,18 @@
     - item.item == "frontend"
     - action == "create"
 
+  - name: delete route 53 records
+    amazon.aws.route53:
+      state: absent
+      zone: "{{domain_name}}"
+      record: "{{item}}-{{env}}.{{domain_name}}"
+      type: A
+      ttl: 1
+    loop: "{{instances}}"
+    when: action == "destroy"
+
   - name: delete EC2 instances
     amazon.aws.ec2_instance:
       name: "{{item}}-{{env}}"
     loop: "{{instances}}"
+    when: action=="destroy"
